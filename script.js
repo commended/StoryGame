@@ -10,85 +10,187 @@
 // --------------------------------------------------
 
 // First, we create a variable for the current scene being displayed
-let currentScene = "backyard";
+let currentScene = "DiningRoom";
 
 // Then, we create an object that stores the data for each scene,
 const scenes = {
   // See "backyard" for the first example
-  backyard: {
-    title: "Location: Backyard",
-    character: "Interviewee:Grandma",
-    text: "Text: well what I remember happening is that Darcie went inside to play with her pretend kitchen, I heard her neighbor mention he was really hungry, and the dog ran around really quickly",
+  DiningRoom: {
+    title: "Location: Dining Room",
+    character: "Narrator",
+    text: "On a dark and stormy night, you and a group of friends are gathered for dinner in Billionaire August's mansion, due to weather conditions, everyone is stuck inside and needs to wait for the storm to pass.",
     // you can choose how many choices to include
     // each choice can have text, an action, and/or nextScene
     choices: [
       {
-        text: "Chase after the dog (-10 HP)",
-        action: function () {
-          updateHealth(-10);
-        },
-        nextScene: "entrance"
+        text: "Excuse yourself to the hallway",
+        nextScene: "Hallway"
       },
       {
-        text: "Ask about the neighbor",
-        nextScene: "hallway"
-      },
-      {
-          text: "Pick up the brass key",
+          text: "Chat with dinner guests",
           action: function () {
             pickUpItem("brass key");
           },
-          nextScene: "hallway"
+          nextScene: "DiningRoom"
       }
     ]
   },
 
-  entrance: {
-    title: "Location: Entrance",
-    character: "Interviewee:Neighbor",
-    text: "well what I remember...",
+  Hallway: {
+    title: "Location: The Hallway",
+    text: "The long, dark hallway is silent. You get an eerie chill as you advance.",
     choices: [
       {
-        text: "Ask about the dog",
-        nextScene: "backyard"
+        text: "Enter the bathroom",
+        nextScene: "BathroomLightOff"
       },
-         {
-        text: "Ask about the neighbor",
-        nextScene: "hallway"
+      {
+        text: "Enter the bedroom",
+        nextScene: "Bedroom"
+      },
+      {
+        text: "Go back to the dining room",
+        nextScene: "DiningRoom"
       }
     ]
   },
 
-  hallway: {
-    title: "The Hallway",
-    text: "The hallway is dark and silent.",
+  Bedroom: {
+    title: "Location: The Bedroom",
+    text: "The bedroom is quiet. You see something on the floor, but can't make out what it is.",
     choices: [
       {
-        text: "backyard",
-        nextScene: "lockedDoor"
+        text: "Investigate the object",
+        nextScene: "TrowelFound"
+      },
+      {
+        text: "Go back to the hallway",
+        nextScene: "Hallway"
       }
     ]
   },
 
-   lockedDoor: {
-    title: "The Locked Door",
-    text: "The door handle doesn't move.",
+   BathroomLightOff: {
+    title: "Location: The Bathroom",
+    text: "The bathroom is dimly lit. You see a figure in the bath but can't make out details.",
     choices: [
       {
-        text: "Try to open it",
-        action: unlockDoor
+        text: "flick the light switch",
+        nextScene: "BathroomLightOn"
       },
       {
         text: "Go back",
-        nextScene: "backyard"
+        nextScene: "Hallway"
       }
     ]
   },
 
-   solution: {
-    title: "The solution",
-    text: "You solved the mystery!",
-    
+  BathroomLightOn: {
+    title: "Location: The Bathroom",
+    text: "The bathroom is now fully lit. You see a figure in the bath, and realize it's August floating in a pool of his own blood!!.",
+    choices: [
+      {
+        text: "Go back",
+        nextScene: "Hallway"
+      },
+      {
+        text: "Investigate the body",
+        nextScene: "SolutionTouched"
+      },
+      {
+        text: "alert the other guests",
+        nextScene: "BodyFound"
+      }
+    ]
+  },
+  
+  TrowelFound: {
+    title: "Location: The Bathroom",
+    text: "You find a trowel in the bathroom, covered in blood. You realize that this is the murder weapon.",
+    choices: [
+      {
+        text: "alert the other guests",
+        nextScene: "SolutionSolved"
+      },
+      {
+        text: "Grab the Trowel to show to the guests",
+        nextScene: "SolutionGrabbed"
+      }
+    ]
+  },
+
+  SolutionTouched: {
+    title: "Failed!!",
+    text: "You turn the body over to find a hole in his back, shaped like a trowel, but as you stand up 3 guests walk in and see you standing over the body. They call the police and you are arrested for the murder of August.",
+    choices: [
+    {
+        text: "Play again",
+        nextScene: "DiningRoom"
+      }
+    ]
+   },
+
+  SolutionGrabbed: {
+    title: "Failed!!",
+    text: "You grab the trowel and show it to the guests, but as you stand up 3 guests walk in and see you with the bloody trowel in hand. They call the police and you are arrested for the murder of August.",
+    choices: [
+    {
+        text: "Play again",
+        nextScene: "DiningRoom"
+      }
+    ]
+   },
+
+   SolutionSolved: {
+    title: "Success!!",
+    text: "You discover the truth behind August's death, discovering the gardener Had killed him with a trowel and are hailed as a hero for solving the mystery.",
+    choices: [
+      {
+        text: "Play again",
+        nextScene: "DiningRoom"
+      }
+    ]
+   },
+
+  BodyFound: {
+    title: "Location: Dining Room",
+    text: "You alert the other guests, and they all rush to the scene. August is confirmed dead, and you are surrounded by witnesses.",
+    choices: [
+      {
+        text: "Try to explain what happened",
+        nextScene: "Examination"
+      },
+      {
+        text: "Accuse the other guests",
+        nextScene: "Accusation"
+      }
+    ]
+  },
+
+  Examination: {
+    title: "Location: The Examination",
+    text: "You try to explain what happened, but the other guests are skeptical.",
+    choices: [
+      {
+        text: "Accuse the other guests",
+        nextScene: "Accusation"
+      }
+    ]
+  },
+
+  Accusation: {
+    title: "Location: The dining room",
+    text: "You accuse the other guests, but they are all shocked and deny any involvement.",
+    choices: [
+      {
+        text: "search the bedroom for clues",
+        nextScene: "Bedroom"
+      },
+      {
+        text: "search the bathroom for clues",
+        nextScene: "BathroomLightOn"
+      }
+    ]
   }
 };
 
