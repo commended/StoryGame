@@ -28,10 +28,19 @@ const scenes = {
       },
       {
           text: "Chat with dinner guests",
-          action: function () {
-            pickUpItem("brass key");
-          },
-          nextScene: "DiningRoom"
+          nextScene: "ChatGuests"
+      }
+    ]
+  },
+
+  ChatGuests: {
+    title: "Location: Dining Room",
+    character: "Narrator",
+    text: "You chat with the other guests, and they tell you that August has been acting strange lately.",
+    choices: [
+      {
+        text: "Excuse yourself to the hallway",
+        nextScene: "Hallway"
       }
     ]
   },
@@ -46,7 +55,9 @@ const scenes = {
       },
       {
         text: "Enter the bedroom",
-        nextScene: "Bedroom"
+        action: function () {
+          unlockDoor();
+        },
       },
       {
         text: "Go back to the dining room",
@@ -87,7 +98,7 @@ const scenes = {
 
   BathroomLightOn: {
     title: "Location: The Bathroom",
-    text: "The bathroom is now fully lit. You see a figure in the bath, and realize it's August floating in a pool of his own blood!!.",
+    text: "The bathroom is now fully lit. You see a figure in the bath, and realize it's August floating in a pool of his own blood next to a key!!.",
     choices: [
       {
         text: "Go back",
@@ -98,6 +109,13 @@ const scenes = {
         nextScene: "SolutionTouched"
       },
       {
+        text: "Pick up the key",
+        action: function () {
+          pickUpItem("master bedroom key");
+        },
+        nextScene: "Hallway"
+      },
+      {
         text: "alert the other guests",
         nextScene: "BodyFound"
       }
@@ -105,7 +123,7 @@ const scenes = {
   },
   
   TrowelFound: {
-    title: "Location: The Bathroom",
+    title: "Location: The Bedroom",
     text: "You find a trowel in the bathroom, covered in blood. You realize that this is the murder weapon.",
     choices: [
       {
@@ -183,8 +201,10 @@ const scenes = {
     text: "You accuse the other guests, but they are all shocked and deny any involvement.",
     choices: [
       {
-        text: "search the bedroom for clues",
-        nextScene: "Bedroom"
+        text: "Search the bedroom for clues",
+        action: function () {
+          unlockDoor();
+        },
       },
       {
         text: "search the bathroom for clues",
@@ -255,32 +275,6 @@ function updateScene(sceneName) {
 // This updates the screen with the current scene
 updateScene(currentScene);
 
-
-// --------------------------------------------------
-// HEALTH
-// Read through the comments below to see what this section does
-//
-// TO CUSTOMIZE THIS SECTION
-// Either customize the name from health to steps, stress, etc...
-// OR
-// create a copy of each step for each additional state you want to track throughout the game
-// --------------------------------------------------
-
-// Create a variable for health
-let health = 100;
-
-// Display current health
-const healthDisplay = document.getElementById("health-display");
-
-// Create a function to update health 
-function updateHealth(amount) {
-  health += amount;
-  healthDisplay.textContent = health;
-}
-
-// This refreshes the health display
-updateHealth(0);
-
 // --------------------------------------------------
 // INVENTORY
 // Read through the comments below to see what this section does
@@ -311,10 +305,11 @@ function pickUpItem(itemName) {
 
 // Create a function that checks if the inventory contains one item and if so shows the win condition scene.
 function unlockDoor() {
-  if (inventory.includes("brass key")) {
-    updateScene("solution");
+  if (inventory.includes("master bedroom key")) {
+    updateScene("Bedroom");
+    messageDisplay.textContent = "You used the master bedroom key to unlock the door.";
   } else {
-    messageDisplay.textContent = "The door is locked.";
+    messageDisplay.textContent = "The master bedroom door is locked.";
   }
 }
 
